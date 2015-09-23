@@ -17,11 +17,9 @@
           zoom: 4,
           center: myLatLng
         });
-        var image = "http://www.clipartbest.com/cliparts/RTd/K48/RTdK48Lxc.png";
         var marker = new google.maps.Marker({
           position: myLatLng,
           map: map,
-          icon: image,
         });
       }
       google.maps.event.addDomListener(window, 'load', initialize);
