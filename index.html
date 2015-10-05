@@ -11,17 +11,17 @@
     </style>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
     <script>
-      function initialize() {
-        var myLatLng = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: myLatLng
-        });
-        var marker = new google.maps.Marker({
-          position: myLatLng,
-          map: map,
-        });
-      }
+      function initialize();
+      //   var myLatLng = {lat: -25.363, lng: 131.044};
+      //   var map = new google.maps.Map(document.getElementById('map'), {
+      //     zoom: 4,
+      //     center: myLatLng
+      //   });
+      //   var marker = new google.maps.Marker({
+      //     position: myLatLng,
+      //     map: map,
+      //   });
+      // }
       google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
@@ -57,7 +57,7 @@
         newData = {lat: numberLat, lng: numberLng};
         map = new google.maps.Map(document.getElementById('map'), {
          zoom: 4,
-         center: new google.maps.LatLng(latD, lngD)
+         center: new google.maps.LatLng(numberLat, numberLng)
       });
         marker = new google.maps.Marker({
           position: newData,
