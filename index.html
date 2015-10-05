@@ -27,7 +27,9 @@
     </script>
   </head>
   <body>
-    <div id = "map"></div>
+    <!-- <div id = "map"></div> -->
+    <h1 id = 'lat'>Latitude: </h1>
+    <h1 id = 'lng'>Longitude: </h1>
     <!-- <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
@@ -43,10 +45,12 @@
       socket.on('latData', function(latitude){
         latitudeD = parseFloat(latitude);
         fLat = latitudeD.toFixed(3);
+        $('#lat').append(fLat);
       });
       socket.on('lngData', function(longitude){
         longitudeD = parseFloat(longitude);
         fLng = longitudeD.toFixed(3);
+        $('#lng').append(fLng);
         update(fLng, fLat);
       })
 
