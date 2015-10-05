@@ -39,14 +39,15 @@
       var longitudeD;
       var socket = io();
       socket.on('latData', function(latitude){
-        latitudeD = parseInt(latitude);
+        latitudeD = parseFloat(latitude);
       });
       socket.on('lngData', function(longitude){
-        longitudeD = parseInt(longitude);
+        longitudeD = parseFloat(longitude);
         update(longitudeD, latitudeD);
       })
 
       function update(lat, lng){
+        console.log(lat, lng);
         myLatLng = {lat: lat, lng: lng};
         map = new google.maps.Map(document.getElementById('map'), {
          zoom: 4,
