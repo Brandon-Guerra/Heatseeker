@@ -37,24 +37,30 @@
     <script>
       var latitudeD;
       var longitudeD;
+      var fLat;
+      var fLng;
       var socket = io();
       socket.on('latData', function(latitude){
         latitudeD = parseFloat(latitude);
+        fLat = latitudeD.toFixed(3);
       });
       socket.on('lngData', function(longitude){
         longitudeD = parseFloat(longitude);
-        update(longitudeD, latitudeD);
+        fLng = longitudeD.toFixed(3);
+        update(fLng, fLat);
       })
 
-      function update(lat, lng){
-        console.log(lat, lng);
-        myLatLng = {lat: lat, lng: lng};
+      function update(latD, lngD){
+        console.log(latD, lngD);
+        numberLat = parseFloat(latD);
+        numberLng = parseFloat(lngD);
+        newData = {lat: numberLat, lng: numberLng};
         map = new google.maps.Map(document.getElementById('map'), {
          zoom: 4,
-         center: myLatLng
+         center: new google.maps.LatLng(latD, lngD)
       });
         marker = new google.maps.Marker({
-          position: myLatLng,
+          position: newData,
           map: map
         });
       }
