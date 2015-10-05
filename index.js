@@ -11,6 +11,10 @@ io.on('connection', function(socket){
     io.emit('latData', latData);
     console.log(latData);
   });
+  socket.on('lngData', function(lngData){
+    io.emit('lngData', lngData);
+    console.log(lngData);
+  });
 });
 
 server.listen(3000, function(){
