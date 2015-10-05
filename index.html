@@ -39,10 +39,10 @@
       var longitudeD;
       var socket = io();
       socket.on('latData', function(latitude){
-        latitudeD = latitude;
+        latitudeD = parseInt(latitude);
       });
       socket.on('lngData', function(longitude){
-        longitudeD = longitude;
+        longitudeD = parseInt(longitude);
         update(longitudeD, latitudeD);
       })
 
@@ -53,8 +53,8 @@
          center: myLatLng
       });
         marker = new google.maps.Marker({
-          position myLatLng;
-          map: map;
+          position: myLatLng,
+          map: map
         });
       }
     </script>
