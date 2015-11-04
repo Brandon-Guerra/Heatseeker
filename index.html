@@ -1,74 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Heatseeker Server</title>
-    <style type="text/css">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Heatseeker</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
       #map {
-        width:  500px;
-        height: 400px;
-        background-color: #CCC;
+        width:  800px;
+        height: 600px;
       }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script>
-      function initialize() {
-         var myLatLng = {lat: -25.363, lng: 131.044};
-         var map = new google.maps.Map(document.getElementById('map'), {
-           zoom: 4,
-           center: myLatLng
-         });
-         var marker = new google.maps.Marker({
-          position: myLatLng,
-           map: map,
-         });
-       }
-      google.maps.event.addDomListener(window, 'load', initialize);
-
-    </script>
   </head>
   <body>
-    <!-- <div id = "map"></div> -->
-    <h1 id = 'lat'>Latitude: </h1>
-    <h1 id = 'lng'>Longitude: </h1>
-    <!-- <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form> -->
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <div id="map"></div>
     <script>
-      var latitudeD;
-      var longitudeD;
-      var fLat;
-      var fLng;
-      var socket = io();
-      socket.on('latData', function(latitude){
-        latitudeD = parseFloat(latitude);
-        fLat = latitudeD.toFixed(3);
-        $('#lat').append(fLat);
-      });
-      socket.on('lngData', function(longitude){
-        longitudeD = parseFloat(longitude);
-        fLng = longitudeD.toFixed(3);
-        $('#lng').append(fLng);
-        update(fLng, fLat);
-      })
 
-      function update(latD, lngD){
-        console.log(latD, lngD);
-        numberLat = parseFloat(latD);
-        numberLng = parseFloat(lngD);
-        newData = {lat: numberLat, lng: numberLng};
-        map = new google.maps.Map(document.getElementById('map'), {
-         zoom: 4,
-         center: new google.maps.LatLng(numberLat, numberLng)
-        });
-        map.setCenter(newData);
-        marker = new google.maps.Marker({
-          position: newData,
-          map: map
-        });
-      }
+var poly;
+var map;
+var markers = [];
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: {lat: 41.879, lng: -87.624}  // Center the map on Chicago, USA.
+  });
+
+  poly = new google.maps.Polyline({
+    strokeColor: 'black',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+  });
+  poly.setMap(map);
+
+  // Add a listener for the click event
+  map.addListener('click', addLatLng);
+}
+
+// Handles click events on a map, and adds a new point to the Polyline.
+function addLatLng(event) {
+  var path = poly.getPath();
+
+  path.push(event.latLng);
+
+  // Add a new marker at the new plotted point on the polyline.
+  var marker = new google.maps.Marker({
+    position: event.latLng,
+    title: '#' + path.getLength(),
+    map: map
+  });
+  markers.push(marker);
+  for (var i = markers.length - 1; i >= 0; i--) {
+    console.log("Latitude: " + markers[i].getPosition().lat());
+    console.log("Longitude: " + markers[i].getPosition().lng());
+  };
+}
+
     </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDSHg5B_CLDJzUqW46Oucayr7uMhkmJe4&signed_in=true&callback=initMap"></script>
   </body>
 </html>
