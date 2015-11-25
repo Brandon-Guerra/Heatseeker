@@ -13,11 +13,13 @@
       #map {
         width:  800px;
         height: 600px;
+        margin: 0 auto;
       }
     </style>
   </head>
   <body>
     <div id="map"></div>
+    <button onclick="initMap()">Clear Points</button>
     <script>
 
 var poly;
@@ -43,6 +45,7 @@ function initMap() {
 
 // Handles click events on a map, and adds a new point to the Polyline.
 function addLatLng(event) {
+  poly.setMap(map);
   var path = poly.getPath();
 
   path.push(event.latLng);
@@ -59,9 +62,8 @@ function addLatLng(event) {
     console.log("Longitude: " + markers[i].getPosition().lng());
   };
 }
-
     </script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDSHg5B_CLDJzUqW46Oucayr7uMhkmJe4&signed_in=true&callback=initMap"></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDSHg5B_CLDJzUqW46Oucayr7uMhkmJe4&signed_in=false&callback=initMap"></script>
   </body>
 </html>
