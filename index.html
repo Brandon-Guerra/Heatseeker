@@ -16,10 +16,12 @@
         margin: 0 auto;
       }
     </style>
+    <script type="text/javascript" src="index.js"></script>
   </head>
   <body>
     <div id="map"></div>
     <button onclick="initMap()">Clear Points</button>
+    <button onclick="sendPathData()">Get Bearing</button>
     <script>
 
       var poly;
@@ -50,6 +52,47 @@
       function getMapClickCount() {
         return mapClickCount++;
       }
+
+      //checks to see if at least two pins have been dropped
+        //can't generate path with one pin
+        function canGetPath() {
+          var mapClickCount = getMapClickCount();
+          if (mapClickCount > 1) {
+            return true;
+          }
+          return false;
+        }
+
+        //Gets latitude and longitude for last two drop pins
+        function getCurrentPath() {
+          var markerCount = markers.length;
+          var latOne = markers[markerCount - 2].getPosition().lat();
+          var lngOne = markers[markerCount - 2].getPosition().lng();
+          var latTwo = markers[markerCount - 1].getPosition().lat();
+          var lngTwo = markers[markerCount - 1].getPosition().lng();
+          var path = {
+            firstLat: latOne,
+            firstLng: lngOne,
+            secondLat: latTwo,
+            secondLng: lngTwo,
+          }
+          return path;
+        }
+
+        //calls getCurrentPath if mapClickCount is > 0
+        function pathData() {
+          if(canGetPath()){
+            path = getCurrentPath();
+            console.log("Lat: " + path.firstLat);
+            console.log("Lng: " + path.firstLng);
+            console.log("Lat: " + path.secondLat);
+            console.log("Lng: " + path.secondLng);
+          }
+          else {
+            console.log("Only one pin on map")
+          }
+        }
+
       // Handles click events on a map, and adds a new point to the Polyline.
       function addLatLng(event) {
         poly.setMap(map);
@@ -68,35 +111,6 @@
           console.log("Latitude: " + markers[i].getPosition().lat());
           console.log("Longitude: " + markers[i].getPosition().lng());
         };
-
-        //checks to see if at least two pins have been dropped
-        //can't generate path with one pin
-        function canGetPath() {
-          var mapClickCount = getMapClickCount();
-          if (mapClickCount > 1) {
-            return true;
-          }
-          return false;
-        }
-
-        //Gets latitude and longitude for last two drop pins
-        function getCurrentPath() {
-          var markerCount = marker.length;
-          var path = new Object(),
-            firstLat = markers[markerCount - 3].getPosition().lat(),
-            firstLng = markers[markerCount - 3].getPosition().lng(),
-            secondLat = markers[markerCount - 2].getPosition().lat(),
-            secondLng = markers[markerCount - 2].getPosition().lng();
-            return path;
-        }
-
-        //calls getCurrentPath if mapClickCount is > 0
-        function pathData() {
-          if(canGetPath()){
-            getCurrentPath();
-          }
-        }
-
       }
     </script>
     <script async defer
