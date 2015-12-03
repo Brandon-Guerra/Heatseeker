@@ -22,46 +22,82 @@
     <button onclick="initMap()">Clear Points</button>
     <script>
 
-var poly;
-var map;
-var markers = [];
+      var poly;
+      var map;
+      var markers = [];
+      var mapClickCount = 0;
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: {lat: 41.879, lng: -87.624}  // Center the map on Chicago, USA.
-  });
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: {lat: 41.879, lng: -87.624}  // Center the map on Chicago, USA.
+        });
 
-  poly = new google.maps.Polyline({
-    strokeColor: 'black',
-    strokeOpacity: 1.0,
-    strokeWeight: 3
-  });
-  poly.setMap(map);
+        poly = new google.maps.Polyline({
+          strokeColor: 'black',
+          strokeOpacity: 1.0,
+          strokeWeight: 3
+        });
+        poly.setMap(map);
 
-  // Add a listener for the click event
-  map.addListener('click', addLatLng);
-}
+        // Add a listener for the click event
+        map.addListener('click', addLatLng);
+        map.addListener('click', getMapClickCount);
+        map.addListener('click', pathData);
+      }
 
-// Handles click events on a map, and adds a new point to the Polyline.
-function addLatLng(event) {
-  poly.setMap(map);
-  var path = poly.getPath();
+      //counts how many times map has been clicked
+      function getMapClickCount() {
+        return mapClickCount++;
+      }
+      // Handles click events on a map, and adds a new point to the Polyline.
+      function addLatLng(event) {
+        poly.setMap(map);
+        var path = poly.getPath();
 
-  path.push(event.latLng);
+        path.push(event.latLng);
 
-  // Add a new marker at the new plotted point on the polyline.
-  var marker = new google.maps.Marker({
-    position: event.latLng,
-    title: '#' + path.getLength(),
-    map: map
-  });
-  markers.push(marker);
-  for (var i = markers.length - 1; i >= 0; i--) {
-    console.log("Latitude: " + markers[i].getPosition().lat());
-    console.log("Longitude: " + markers[i].getPosition().lng());
-  };
-}
+        // Add a new marker at the new plotted point on the polyline.
+        var marker = new google.maps.Marker({
+          position: event.latLng,
+          title: '#' + path.getLength(),
+          map: map
+        });
+        markers.push(marker);
+        for (var i = markers.length - 1; i >= 0; i--) {
+          console.log("Latitude: " + markers[i].getPosition().lat());
+          console.log("Longitude: " + markers[i].getPosition().lng());
+        };
+
+        //checks to see if at least two pins have been dropped
+        //can't generate path with one pin
+        function canGetPath() {
+          var mapClickCount = getMapClickCount();
+          if (mapClickCount > 1) {
+            return true;
+          }
+          return false;
+        }
+
+        //Gets latitude and longitude for last two drop pins
+        function getCurrentPath() {
+          var markerCount = marker.length;
+          var path = new Object(),
+            firstLat = markers[markerCount - 3].getPosition().lat(),
+            firstLng = markers[markerCount - 3].getPosition().lng(),
+            secondLat = markers[markerCount - 2].getPosition().lat(),
+            secondLng = markers[markerCount - 2].getPosition().lng();
+            return path;
+        }
+
+        //calls getCurrentPath if mapClickCount is > 0
+        function pathData() {
+          if(canGetPath()){
+            getCurrentPath();
+          }
+        }
+
+      }
     </script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDSHg5B_CLDJzUqW46Oucayr7uMhkmJe4&signed_in=false&callback=initMap"></script>
